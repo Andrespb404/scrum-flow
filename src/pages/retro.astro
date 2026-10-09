@@ -2,6 +2,25 @@
 import Layout from '../layouts/Layout.astro';
 ---
 <Layout title="Retro" active="retro">
-  <h1 class="h3 mb-3">Retro</h1>
-  <div class="alert alert-secondary">Aquí irá la retrospectiva.</div>
+  <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+    <h1 class="h3 me-auto mb-0">Retrospectiva</h1>
+    <div class="d-flex align-items-center gap-2">
+      <label class="form-label mb-0" for="sprint-select">Sprint</label>
+      <select id="sprint-select" class="form-select form-select-sm w-auto" aria-label="Seleccionar sprint"></select>
+    </div>
+  </div>
+
+  <div id="sin-sprints" class="alert alert-info d-none">
+    Aún no hay sprints. <a href="/sprint" class="alert-link">Crear sprint</a>
+  </div>
+
+  <div id="sin-sprint" class="alert alert-secondary d-none">Selecciona un sprint.</div>
+
+  <div id="resumen" class="mb-4 small text-body-secondary"></div>
+
+  <div id="retro-columns" class="row g-3"></div>
+
+  <script>
+    import '../scripts/retro.js';
+  </script>
 </Layout>
