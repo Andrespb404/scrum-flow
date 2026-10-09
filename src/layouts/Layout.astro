@@ -1,0 +1,56 @@
+---
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+const { title = 'ScrumFlow', active = '' } = Astro.props;
+const links = [
+  { href: '/', label: 'Dashboard', icon: 'speedometer2', id: 'dashboard' },
+  { href: '/tablero', label: 'Tablero', icon: 'kanban', id: 'tablero' },
+  { href: '/backlog', label: 'Backlog', icon: 'list-task', id: 'backlog' },
+  { href: '/sprint', label: 'Sprint', icon: 'flag', id: 'sprint' },
+  { href: '/retro', label: 'Retro', icon: 'arrow-repeat', id: 'retro' },
+];
+---
+<!doctype html>
+<html lang="es" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} · ScrumFlow</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
+      <div class="container-fluid">
+        <a class="navbar-brand fw-semibold" href="/"><i class="bi bi-lightning-charge-fill text-warning"></i> ScrumFlow</a>
+        <ul class="navbar-nav flex-row gap-3 me-auto">
+          {links.map((l) => (
+            <li class="nav-item">
+              <a class={`nav-link ${active === l.id ? 'active fw-semibold' : ''}`} href={l.href}>
+                <i class={`bi bi-${l.icon}`}></i> {l.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+        <div class="d-flex gap-2">
+          <button id="btn-export" class="btn btn-sm btn-outline-secondary"><i class="bi bi-download"></i> Exportar</button>
+          <label class="btn btn-sm btn-outline-secondary mb-0"><i class="bi bi-upload"></i> Importar
+            <input id="file-import" type="file" accept="application/json" hidden />
+          </label>
+        </div>
+      </div>
+    </nav>
+    <main class="container-fluid py-4">
+      <slot />
+    </main>
+    <script>
+      import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+      import { exportJSON, importJSON } from '../scripts/db.js';
+      document.getElementById('btn-export')?.addEventListener('click', exportJSON);
+      document.getElementById('file-import')?.addEventListener('change', async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        try { await importJSON(file); location.reload(); }
+        catch (err) { alert('Archivo inválido: ' + err.message); }
+      });
+    </script>
+  </body>
+</html>

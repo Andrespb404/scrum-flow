@@ -1,0 +1,25 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Backlog" active="backlog">
+  <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+    <h1 class="h3 me-auto mb-0">Backlog <small id="resumen" class="fs-6 text-body-secondary"></small></h1>
+    <select id="f-proyecto" class="form-select form-select-sm w-auto" aria-label="Filtrar por proyecto"></select>
+  </div>
+
+  <div id="sin-sprints" class="alert alert-info d-none">
+    Para mover tareas necesitas un sprint. <a href="/sprint" class="alert-link">Crear sprint</a>
+  </div>
+  <div id="vacio" class="alert alert-secondary d-none">No hay tareas en el backlog. Crea tareas en el <a href="/tablero" class="alert-link">tablero</a> sin asignar sprint.</div>
+
+  <div class="table-responsive">
+    <table class="table align-middle">
+      <thead><tr><th>Tarea</th><th>Proyecto</th><th>Prioridad</th><th class="text-end">Pts</th><th>Sprint</th><th></th></tr></thead>
+      <tbody id="tabla-body"></tbody>
+    </table>
+  </div>
+
+  <script>
+    import '../scripts/backlog.js';
+  </script>
+</Layout>

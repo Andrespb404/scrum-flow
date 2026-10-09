@@ -1,0 +1,23 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Sprint" active="sprint">
+  <h1 class="h3 mb-3">Sprints</h1>
+
+  <form id="form-sprint" class="card card-body mb-4">
+    <div class="row g-2 align-items-end">
+      <div class="col-12 col-md-3"><label class="form-label" for="s-nombre">Nombre</label><input id="s-nombre" class="form-control" required maxlength="60" placeholder="Sprint 1" /></div>
+      <div class="col-12 col-md-4"><label class="form-label" for="s-meta">Meta</label><input id="s-meta" class="form-control" maxlength="160" /></div>
+      <div class="col-6 col-md-2"><label class="form-label" for="s-inicio">Inicio</label><input id="s-inicio" type="date" class="form-control" /></div>
+      <div class="col-6 col-md-2"><label class="form-label" for="s-fin">Fin</label><input id="s-fin" type="date" class="form-control" /></div>
+      <div class="col-12 col-md-1 d-grid"><button class="btn btn-primary" type="submit">Crear</button></div>
+    </div>
+  </form>
+
+  <div id="vacio" class="alert alert-secondary d-none">Aún no hay sprints.</div>
+  <div id="lista" class="row g-3"></div>
+
+  <script>
+    import '../scripts/sprint.js';
+  </script>
+</Layout>
