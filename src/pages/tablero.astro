@@ -1,7 +1,129 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { ESTADOS, ESTADO_LABEL } from '../scripts/db.js';
 ---
 <Layout title="Tablero" active="tablero">
-  <h1 class="h3 mb-3">Tablero</h1>
-  <div class="alert alert-secondary">Aquí irá el tablero Kanban.</div>
+  <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+    <h1 class="h3 me-auto mb-0">Tablero</h1>
+    <div class="d-flex align-items-center gap-2">
+      <label class="form-label mb-0" for="sprint-select">Sprint</label>
+      <select id="sprint-select" class="form-select form-select-sm w-auto"></select>
+    </div>
+    <button id="btn-nueva-tarea" class="btn btn-primary btn-sm" type="button">+ Nueva tarea</button>
+    <button id="btn-nuevo-proyecto" class="btn btn-outline-secondary btn-sm" type="button">+ Proyecto</button>
+  </div>
+
+  <div class="mb-3">
+    <div class="d-flex justify-content-between align-items-center mb-1">
+      <small class="text-body-secondary">Avance</small>
+      <strong id="resumen-puntos">0/0 pts</strong>
+    </div>
+    <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+      <div id="resumen-bar" class="progress-bar" style="width:0%">0%</div>
+    </div>
+  </div>
+
+  <div id="sin-sprints" class="alert alert-info d-none">
+    Aún no hay sprints. <a href="/sprint" class="alert-link">Crear sprint</a>
+  </div>
+  <div id="sin-tareas" class="alert alert-secondary">Sin tareas.</div>
+
+  <div class="row g-3">
+    {ESTADOS.map((estado) => (
+      <div class="col-12 col-md-6 col-xl-3">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-header bg-body-tertiary d-flex justify-content-between align-items-center">
+            <h2 class="h6 mb-0 text-uppercase">{ESTADO_LABEL[estado as keyof typeof ESTADO_LABEL]}</h2>
+            <span class="badge text-bg-secondary" data-count={estado}>0</span>
+          </div>
+          <div class="columna card-body bg-body-tertiary-subtle" data-estado={estado} style="min-height: 220px;">
+            <div class="small text-body-secondary">Sin tareas</div>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <div class="modal fade" id="task-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <form id="task-form">
+          <div class="modal-header">
+            <h2 class="modal-title h5">Nueva tarea</h2>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row g-3">
+              <div class="col-12">
+                <label class="form-label" for="task-title">Título</label>
+                <input id="task-title" class="form-control" maxlength="120" required />
+              </div>
+              <div class="col-12">
+                <label class="form-label" for="task-descripcion">Descripción</label>
+                <textarea id="task-descripcion" class="form-control" rows="3" maxlength="500"></textarea>
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label" for="task-proyecto">Proyecto</label>
+                <select id="task-proyecto" class="form-select"></select>
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label" for="task-sprint">Sprint</label>
+                <select id="task-sprint" class="form-select"></select>
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label" for="task-prioridad">Prioridad</label>
+                <select id="task-prioridad" class="form-select">
+                  <option value="alta">Alta</option>
+                  <option value="media" selected>Media</option>
+                  <option value="baja">Baja</option>
+                </select>
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label" for="task-puntos">Puntos</label>
+                <input id="task-puntos" type="number" min="0" step="1" class="form-control" value="1" />
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer justify-content-between">
+            <button id="task-delete" type="button" class="btn btn-outline-danger d-none">Borrar</button>
+            <div class="ms-auto d-flex gap-2">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button id="task-submit" type="submit" class="btn btn-primary">Crear</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="project-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <form id="project-form">
+          <div class="modal-header">
+            <h2 class="modal-title h5">Nuevo proyecto</h2>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label" for="project-nombre">Nombre</label>
+              <input id="project-nombre" class="form-control" maxlength="80" required />
+            </div>
+            <div>
+              <label class="form-label" for="project-color">Color</label>
+              <input id="project-color" type="color" class="form-control form-control-color w-100" value="#0d6efd" />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    import '../scripts/tablero.js';
+  </script>
 </Layout>

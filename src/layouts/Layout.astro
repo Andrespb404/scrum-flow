@@ -42,7 +42,7 @@ const links = [
       <slot />
     </main>
     <script>
-      import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+      import 'bootstrap';
       import { exportJSON, importJSON } from '../scripts/db.js';
       document.getElementById('btn-export')?.addEventListener('click', exportJSON);
       document.getElementById('file-import')?.addEventListener('change', async (e) => {
