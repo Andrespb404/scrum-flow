@@ -1,7 +1,98 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { ESTADOS, ESTADO_LABEL } from '../scripts/db.js';
 ---
 <Layout title="Dashboard" active="dashboard">
-  <h1 class="h3 mb-3">Dashboard</h1>
-  <div class="alert alert-secondary">Aquí irán las gráficas de progreso.</div>
+  <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+    <h1 class="h3 me-auto mb-0">Dashboard</h1>
+    <div class="d-flex align-items-center gap-2">
+      <label class="form-label mb-0" for="sprint-select">Sprint</label>
+      <select id="sprint-select" class="form-select form-select-sm w-auto" aria-label="Seleccionar sprint"></select>
+    </div>
+  </div>
+
+  <div id="sin-sprints" class="alert alert-info d-none">
+    Aún no hay sprints. <a href="/sprint" class="alert-link">Crear sprint</a>
+  </div>
+  <div id="sin-datos" class="alert alert-secondary d-none">Sin tareas para este sprint.</div>
+
+  <section id="kpis" class="row g-3 mb-4">
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card h-100 border-0 shadow-sm">
+        <div class="card-body">
+          <div class="small text-body-secondary">Avance</div>
+          <div class="d-flex align-items-center justify-content-between mt-2">
+            <div id="kpi-avance-value" class="h4 mb-0">0%</div>
+          </div>
+          <div class="progress mt-3" role="progressbar" aria-label="Avance del sprint">
+            <div id="kpi-avance-bar" class="progress-bar" style="width:0%">0%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card h-100 border-0 shadow-sm">
+        <div class="card-body">
+          <div class="small text-body-secondary">Puntos</div>
+          <div id="kpi-puntos-value" class="h4 mt-2 mb-0">0/0 pts</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card h-100 border-0 shadow-sm">
+        <div class="card-body">
+          <div class="small text-body-secondary">Tareas</div>
+          <div id="kpi-tareas-value" class="h4 mt-2 mb-0">0/0</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card h-100 border-0 shadow-sm">
+        <div class="card-body">
+          <div class="small text-body-secondary">Días restantes</div>
+          <div id="kpi-dias-value" class="h4 mt-2 mb-0">0</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="row g-4">
+    <div class="col-12 col-lg-6 chart-panel">
+      <div class="card h-100 border-0 shadow-sm">
+        <div class="card-header bg-body-tertiary">Burndown</div>
+        <div class="card-body" style="height: 320px; position: relative;">
+          <canvas id="burndown-chart" aria-label="Burndown del sprint"></canvas>
+          <div id="burndown-empty" class="small text-body-secondary d-none"></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-lg-6 chart-panel">
+      <div class="card h-100 border-0 shadow-sm">
+        <div class="card-header bg-body-tertiary">Tareas por estado</div>
+        <div class="card-body" style="height: 320px; position: relative;">
+          <canvas id="estado-chart" aria-label="Tareas por estado"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-lg-6 chart-panel">
+      <div class="card h-100 border-0 shadow-sm">
+        <div class="card-header bg-body-tertiary">Velocidad por sprint</div>
+        <div class="card-body" style="height: 320px; position: relative;">
+          <canvas id="velocidad-chart" aria-label="Velocidad por sprint"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-lg-6 chart-panel">
+      <div class="card h-100 border-0 shadow-sm">
+        <div class="card-header bg-body-tertiary">Puntos por proyecto</div>
+        <div class="card-body" style="height: 320px; position: relative;">
+          <canvas id="proyecto-chart" aria-label="Puntos por proyecto"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    import '../scripts/dashboard.js';
+  </script>
 </Layout>
